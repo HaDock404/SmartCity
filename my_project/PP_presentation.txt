@@ -1,0 +1,114 @@
+- Bonjour, je m'appelle Gael Delescluse et je vais présenter mon deuxième projet : participez à un concours sur la smart City
+- C'est un challenge organisé par l'ONG Data For Good qui propose des concours de data science en ligne sur des thématiques aussi bien environnementale que sociétale. 
+- Ce concours est centré sur la répartition des arbres de Paris et plus largement d'île de France dans l'objectif d'optimiser les tournées d'entretiens des arbres de la ville 
+
+
+- Je vais commencer ma présentation par l'analyse du dataset puis par un premier nettoyage, une explication de ma méthodologie, un second nettoyage et enfin terminer ma présentation par différentes visualisation graphique des données.
+
+
+- Avec une superficie de 105km², la ville de Paris compte pas moins de 200.000 arbres plantés dans les rues, les espaces verts et les équipements municipaux, le tout répartis en 193 espèces.
+- On peut également retrouver plus de 300 000 arbres dans les bois de Boulogne et le bois de Vincennes 
+- Paris est une des capitales les plus boisées d’Europe. 170 000 arbre de plus seront planté d'ici 2026
+- C'est la Ville de Paris qui assure la surveillance du patrimoine arboré, le remplacement des arbres dépérissant, l’installation de nouvelles plantations ainsi que le ramassage de près de 4500 tonnes de feuilles chaque année
+
+
+- En analysant le dataset on constate que le fichier est sous le format csv avec des séparateurs point virgule
+- certaines données sont mal séparé par le point virgule en particulier l'adresse des individus
+- on retrouve dans ce dataset 200.137 arbres ou individus, avec 18 colonnes donnant pour chaque individus leur caractéristique
+- il y a également de nombreuses données manquantes, des données aberrantes et également des données atypique
+
+
+- il est alors nécessaire d'effectuer un premier travail de nettoyage du dataset pour pouvoir travailler sur ces données
+- J'ai utilisé virtualenv pour créer une salle blanche, isolée des autres version de python et des bibliothèques
+- j'ai vérifié les versions des outils que j'utilise dans le notebook
+- puis j'ai commencé à nettoyer le dataset en supprimant les paramètres qui ne me servirait pas dans mon étude et j'ai corrigé les titres des colonne qui n'était pas explicite ou mal renseigné
+- j'ai supprimé les individus dont les paramètres manquants ne pouvaient pas du tout être retrouvé notamment pour le nom de l'espèce ou lorsque l'espèce était indiqué comme non spécifié
+
+
+- pour effectuer une bonne analyse des données j'ai modifié l'unité des paramètres pour qu'ils soient à la même échelle, pour le paramètre circonférence j'ai divisé par 100 pour transformer des centimètres en mètres
+- pour avoir une représentation de l'impacte des valeurs aberrantes ou atypique j'ai pris un arbre type qui m'a servi d'exemple pour représenter la répartition des dimensions des arbres dans le dataset
+- j'ai pu constater que la moyenne des tilleuls dans le dataset ne correspondait pas aux dimensions habituellement constaté pour ce type d'arbre
+- j'ai remarqué une moyenne de 50mètres de haut pour les tilleuls du dataset alors qu'un tilleul adulte mesure en moyenne 18-20 mètres
+- il y a donc des incohérences dû aux valeurs atypiques qui ne sont pas conforme à la réalité
+- j'ai analysé la répartition des dimensions de ces arbres en faisant apparaitre l'interquartile 
+- on peut remarquer que 50% des arbres mesures entre 5 mètres et 12 mètres, la médiane se situant à 10 mètres.
+- l'analyse de l'interquartile m'a permis de constater sa pertinence car ce sont des valeurs en adéquation avec ce que l'on peut retrouver dans la réalité
+
+
+- J'ai ensuite effectué une répartition des dimensions des arbres du dataset sous forme de boite à moustache pour étudier visuellement et rapidement les incohérences de dimensions présente dans le dataset
+- en affichant ou non les outliers je me suis rendu compte d'abord qu'il y a de nombreux outliers qui biaisent complètement mon étude du dataset, et que les valeurs atypiques faussent la répartition des dimensions des arbres
+
+
+- j'ai donc décidé en essayant différentes valeurs de supprimer 5% des valeurs qui me semblaient atypiques pour l'ensemble du dataset pour arriver à étudier correctement la bonne réparation des dimensions des arbres
+- j'ai privilégié cette solution car elle me semblait la plus pertinente en ne supprimant que 19.000 individus sur 200.000 je conserve une bonne répartition du dataset qui aurait pu être biaisé en concentrant ces valeurs autour de la médiane 
+- on constate alors que l'on retrouve une moyenne pour le tilleul qui correspond au dimension de la réalité pour ce type d'arbre
+
+
+- pour effectuer une visualisation des données on importe la bibliothèque matplotlib 
+- on choisira le type de représentation graphique que l'on souhaite voir apparaitre
+- et on spécifie les données que l'on veut voir représenté
+
+
+- on représente ensuite les données que l'on souhaite étudier
+- pour la circonférence j'ai choisi une boite à moustache faisant apparaitre l'interquartile de la circonférence
+- les valeurs correspondent à des valeurs européennes convenable, en ville il faut s'assurer que les arbres ne s'étale pas trop sur la voirie, une circonférence d'un mètre permet un bon compromis entre bien être environnementale et pragmatisme urbain, il faut penser au l'utilisation des espace commun en particulier des trottoirs qui doivent permettre une bonne circulation des piétons et l'empiètement des arbres qui permettent de rafraichir le béton citadin
+- on peut constater une répartition des circonférences pouvant aller jusqu'à plus de 2 mètres dont certains sont même des outliers mais ne sont pas des valeurs aberrantes, cela s'explique par la surreprésentation des arbres d'alignements et d'autre arbres qui peuvent se trouver en jardin et ne nécessite pas de restreindre leur circonférence
+
+
+- également pour la hauteur des arbres j'ai choisi une représentation en boite à moustache faisant apparaitre l'interquartile de la hauteur des arbres
+- on remarque que 50% des valeurs sont comprise entre 4 et 11 mètres avec des variations pouvant aller jusqu'à 20 mètres et légèrement au delà
+- Paris est composé de nombreux immeubles Haussmannien qui ont servi de base architecturale pour d'autre construction, leur hauteur est de 12 à 20 mètres. La hauteur des bâtiments parisiens se situe en général dans cette tranche de dimension. Les arbres des alignements parisiens arrivent en général à la moitié de ces bâtiments, permettant de faire entrer la lumière dans les appartement les plus bas et permet de dégager entièrement la vu des appartements les plus haut.
+- les variations de hauteur de la boite à moustache peuvent s'expliquer par la surreprésentation des arbres d'alignement dans le jeu de données. Les arbres de jardin ne nécessitent pas de respecter des hauteur maximale pour la sécurité et le bien être des citadins.
+
+
+- Pour la répartition des arbres dans la capital j'ai opté pour un diagramme en camembert, cela permet visuellement de comprendre facilement la réparation des arbres.
+- avec plus de 6.000 voies en tout genre pour un total de 1700km il est normal de constater une surrépartition des arbres parisiens dans les alignements avec plus de 50%
+- viens ensuite les jardin avec près de 530 jardins géré par la ville, qui totalise 2200 hectares, et représente 22% des arbres de Paris
+- les cimetières parisiens au nombre d'une 20aine accueille pas moins de 634k concessions sur 422 hectares. C'est pourquoi il représente une part importante dans la représentation des arbres parisiens avec un peu plus de 15%.
+- viens ensuite les collèges et lycée, les ministères ou organisme sociaux, les bâtiments sportif qui représente une part négligeable dans la répartition des arbres parisiens en comparaison au trois grands bloque que sont les alignements les jardins et les cimetières
+
+
+- j'ai ensuite réalise une Colormap de la répartition des arbres par rapport aux arrondissements parisiens, j'ai supprimé la répartition des arbres en dehors de paris. 
+- on peut constater que les arbres sont moins présent dans le centre de Paris, délimité par le mur des fermiers généraux construit à la révolution française. Ce qui peut expliquer la faible concentration d'arbres dans cette partie de la ville, l'urbanisme étant plus ancien, le respect du cadre architectural de Paris n'aura peut être pas permis à la ville de Paris d'ajouter de nouveau arbre contrairement aux arrondissement extérieur intégré à la ville de Paris suite à la démolition du mur en 1860.
+
+
+- Et enfin j'ai réalisé un nuage de point ou l'on peut remarquer une corrélation linéaire entre la hauteur et la circonférence malgré l'étalement des points du nuage
+
+
+- en résumé, Paris c'est 1900 arbres par km2, 193 espèces dont 17 conifères et 171 feuillus.
+- chaque année la ville de Paris replantes pas moins de 3000 nouveaux arbres. Leur entretiens est une lourde de tâche qui peut être facilité par un suivi correctement fait dans une base de données permettant ainsi un suivi de leur évolution et facilitant leur entretiens. 
+- En se basant sur l'analyse des données du dataset je peux en tirer plusieurs conclusions et idées d'amélioration
+- le paramètres stade de développement est mal renseigné et ne permet pas d'effectuer un suivi de l'évolution de l'arbre pour prévoir son entretiens
+- aucune remarque n'est effectué sur l'ensemble des arbres sur leur état de santé et les précautions à prendre ni de suivi des opérations effectué par les agents sur ces dit arbres. 
+- par le biais des boites à moustaches on peut facilement catégoriser les arbres suivant leur cycle de développement pour chaque espèce
+- avoir un historique de l'entretien des arbres permettrait de prévoir les opérations à apporter pour garantir leur bonne santé et améliorer leur entretiens
+- une répartition des agents d'entretiens et donc des budgets alloués à l'entretiens des arbres pourra être effectué grâce à ma colormap en suivant la répartition des arbres par arrondissement
+- Une répartition des effectifs d'entretiens des arbres de la ville de Paris pourra être fait en suivant mon diagramme camembert en se focalisant sur les arbres d'alignements qui représente plus de la moitié des arbres parisiens.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
